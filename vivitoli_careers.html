@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Vivitoli's Career Map</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-dark: #2D4A2D;
+    --green-mid: #4A7C59;
+    --green-light: #7AAF82;
+    --brown-dark: #5C3D2E;
+    --brown-mid: #8B6347;
+    --brown-light: #C4A882;
+    --beige: #F2EBD9;
+    --beige-light: #FAF6EE;
+    --cream: #FDF8F0;
+    --text-dark: #2A1F14;
+    --text-mid: #5C4A35;
+    --gold: #C9A84C;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text-dark);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(160deg, var(--green-dark) 0%, #1e3320 50%, var(--brown-dark) 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 0 48px 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-texture {
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(122,175,130,0.15) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(196,168,130,0.1) 0%, transparent 50%);
+  }
+
+  .hero-leaves {
+    position: absolute;
+    top: 0; right: 0;
+    width: 200px;
+    height: 300px;
+    opacity: 0.07;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 300'%3E%3Cellipse cx='100' cy='80' rx='60' ry='80' fill='%23ffffff' transform='rotate(-20,100,80)'/%3E%3Cellipse cx='140' cy='180' rx='45' ry='70' fill='%23ffffff' transform='rotate(15,140,180)'/%3E%3Cellipse cx='60' cy='220' rx='50' ry='75' fill='%23ffffff' transform='rotate(-10,60,220)'/%3E%3C/svg%3E") no-repeat;
+    background-size: contain;
+  }
+
+  .hero-badge {
+    position: absolute;
+    top: 48px;
+    left: 24px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.7);
+    text-transform: uppercase;
+  }
+
+  .hero-content {
+    padding: 0 28px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-sub {
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--green-light);
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+
+  .hero-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--beige-light);
+    line-height: 1.05;
+    margin-bottom: 8px;
+  }
+
+  .hero-name span {
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  .hero-tagline {
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    font-weight: 300;
+    line-height: 1.6;
+    max-width: 280px;
+    margin-bottom: 36px;
+  }
+
+  .hero-scroll {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: rgba(255,255,255,0.4);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+  }
+
+  .hero-scroll-line {
+    width: 40px;
+    height: 1px;
+    background: rgba(255,255,255,0.3);
+  }
+
+  /* SECTION HEADER */
+  .tier-header {
+    padding: 52px 28px 8px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .tier-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 80px;
+    font-weight: 700;
+    line-height: 0.85;
+    opacity: 0.08;
+    color: var(--green-dark);
+    user-select: none;
+  }
+
+  .tier-meta {
+    padding-top: 8px;
+  }
+
+  .tier-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  .tier-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .tier-least .tier-label { color: var(--brown-mid); }
+  .tier-least .tier-title { color: var(--brown-dark); }
+  .tier-mid .tier-label { color: var(--green-mid); }
+  .tier-mid .tier-title { color: var(--green-dark); }
+  .tier-best .tier-label { color: var(--gold); }
+  .tier-best .tier-title { color: var(--brown-dark); }
+
+  /* DIVIDER */
+  .tier-divider {
+    height: 3px;
+    margin: 0 28px 8px;
+    border-radius: 2px;
+  }
+  .tier-least .tier-divider { background: linear-gradient(90deg, var(--brown-mid), transparent); }
+  .tier-mid .tier-divider { background: linear-gradient(90deg, var(--green-mid), transparent); }
+  .tier-best .tier-divider { background: linear-gradient(90deg, var(--gold), transparent); }
+
+  /* CARDS */
+  .cards-wrapper {
+    padding: 16px 20px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .job-card {
+    background: var(--beige-light);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(44,60,30,0.08);
+    border: 1px solid rgba(122,175,130,0.12);
+    animation: fadeUp 0.5s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-top {
+    padding: 22px 22px 18px;
+    position: relative;
+  }
+
+  .card-emoji {
+    font-size: 32px;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--green-dark);
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+
+  .card-subtitle {
+    font-size: 12px;
+    color: var(--text-mid);
+    font-weight: 400;
+    letter-spacing: 0.04em;
+  }
+
+  .salary-pill {
+    position: absolute;
+    top: 22px;
+    right: 18px;
+    background: var(--green-dark);
+    color: var(--beige-light);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 100px;
+    letter-spacing: 0.04em;
+  }
+
+  .tier-best .salary-pill {
+    background: linear-gradient(135deg, var(--brown-dark), var(--gold));
+  }
+
+  /* TABS */
+  .card-tabs {
+    display: flex;
+    padding: 0 22px;
+    gap: 4px;
+    border-bottom: 1px solid rgba(44,60,30,0.08);
+  }
+
+  .tab-btn {
+    flex: 1;
+    padding: 10px 0;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--brown-light);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.2s;
+  }
+
+  .tab-btn.active {
+    color: var(--green-dark);
+    border-bottom-color: var(--green-mid);
+  }
+
+  .tier-best .tab-btn.active {
+    color: var(--brown-dark);
+    border-bottom-color: var(--gold);
+  }
+
+  /* TAB CONTENT */
+  .tab-content {
+    display: none;
+    padding: 18px 22px 22px;
+    animation: fadeIn 0.25s ease;
+  }
+
+  .tab-content.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* WHAT THEY DO */
+  .do-text {
+    font-size: 13.5px;
+    color: var(--text-mid);
+    line-height: 1.75;
+  }
+
+  /* SALARY */
+  .salary-section {}
+  .salary-range {
+    background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 14px;
+  }
+
+  .tier-best .salary-range {
+    background: linear-gradient(135deg, var(--brown-dark), #8B6347);
+  }
+
+  .salary-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 4px;
+  }
+
+  .salary-big {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+    line-height: 1;
+  }
+
+  .salary-note {
+    font-size: 11px;
+    color: rgba(255,255,255,0.6);
+    margin-top: 4px;
+  }
+
+  .salary-breakdown {
+    display: flex;
+    gap: 10px;
+  }
+
+  .breakdown-item {
+    flex: 1;
+    background: var(--beige);
+    border-radius: 12px;
+    padding: 12px;
+  }
+
+  .breakdown-label {
+    font-size: 10px;
+    color: var(--brown-mid);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .breakdown-val {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--green-dark);
+  }
+
+  /* ROADMAP */
+  .roadmap {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .roadmap-step {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  .step-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .step-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--green-mid);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  .tier-best .step-dot {
+    background: var(--brown-mid);
+  }
+
+  .step-line {
+    width: 2px;
+    flex: 1;
+    min-height: 24px;
+    background: linear-gradient(to bottom, var(--green-light), transparent);
+    margin: 4px 0;
+  }
+
+  .tier-best .step-line {
+    background: linear-gradient(to bottom, var(--brown-light), transparent);
+  }
+
+  .roadmap-step:last-child .step-line { display: none; }
+
+  .step-content {
+    padding-bottom: 20px;
+  }
+
+  .step-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--green-dark);
+    margin-bottom: 3px;
+  }
+
+  .tier-best .step-title { color: var(--brown-dark); }
+
+  .step-desc {
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+
+  /* SECTION SPACER */
+  .section-spacer {
+    height: 20px;
+    background: linear-gradient(to bottom, var(--cream), var(--beige));
+    margin: 12px 0 0;
+  }
+
+  .section-spacer-inv {
+    height: 20px;
+    background: linear-gradient(to bottom, var(--beige), var(--cream));
+    margin: 0 0 0;
+  }
+
+  /* TIER WRAPPERS */
+  .tier-least { background: var(--cream); }
+  .tier-mid { background: #F5F0E8; }
+  .tier-best {
+    background: linear-gradient(180deg, #F0EAD6 0%, #EBE3CC 100%);
+  }
+
+  /* FOOTER */
+  .footer {
+    background: var(--green-dark);
+    padding: 40px 28px;
+    text-align: center;
+  }
+
+  .footer-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: var(--beige-light);
+    margin-bottom: 8px;
+  }
+
+  .footer-name span { color: var(--gold); font-style: italic; }
+
+  .footer-msg {
+    font-size: 12px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.7;
+    max-width: 260px;
+    margin: 0 auto;
+  }
+
+  .footer-leaf {
+    font-size: 28px;
+    margin-bottom: 16px;
+    display: block;
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-texture"></div>
+  <div class="hero-leaves"></div>
+  <div class="hero-badge">PCB Career Guide · 2025</div>
+  <div class="hero-content">
+    <p class="hero-sub">Exclusively crafted for</p>
+    <h1 class="hero-name">Vivitoli<br><span>Chishi</span></h1>
+    <p class="hero-tagline">Your personalised roadmap — real money, real life, without losing your mind studying.</p>
+    <div class="hero-scroll">
+      <div class="hero-scroll-line"></div>
+      <span>Scroll to explore</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ TIER 1 — LEAST SUITABLE ═══════════════ -->
+<section class="tier-least">
+  <div class="tier-header">
+    <div class="tier-number">01</div>
+    <div class="tier-meta">
+      <p class="tier-label">Think twice before choosing</p>
+      <h2 class="tier-title">Least Suitable<br>for You</h2>
+    </div>
+  </div>
+  <div class="tier-divider" style="height:3px;margin:0 28px 8px;border-radius:2px;background:linear-gradient(90deg,#8B6347,transparent);"></div>
+
+  <div class="cards-wrapper">
+
+    <!-- MBBS -->
+    <div class="job-card tier-least" id="card-mbbs">
+      <div class="card-top">
+        <span class="card-emoji">🩺</span>
+        <div class="card-title">MBBS Doctor</div>
+        <div class="card-subtitle">General Physician / Surgeon</div>
+        <div class="salary-pill">₹1–8L/mo</div>
+      </div>
+      <div class="card-tabs">
+        <button class="tab-btn active" onclick="switchTab('mbbs','do',this)">What they do</button>
+        <button class="tab-btn" onclick="switchTab('mbbs','salary',this)">Salary</button>
+        <button class="tab-btn" onclick="switchTab('mbbs','road',this)">Roadmap</button>
+      </div>
+      <div class="tab-content active" id="mbbs-do">
+        <p class="do-text">Diagnose and treat patients, perform surgeries (if specialized), work in hospitals, clinics, or run private practice. It's a respected profession — but insanely demanding. Long OPD hours, night duties, and no chill until you're well into your 30s.</p>
+      </div>
+      <div class="tab-content" id="mbbs-salary">
+        <div class="salary-section">
+          <div class="salary-range">
+            <div class="salary-label">Average Monthly</div>
+            <div class="salary-big">₹1 – 8L</div>
+            <div class="salary-note">Freshers start at ₹50k–1L. Senior specialists hit 5–8L+</div>
+          </div>
+          <div class="salary-breakdown">
+            <div class="breakdown-item">
+              <div class="breakdown-label">Start Earning</div>
+              <div class="breakdown-val">Age 26–27</div>
+            </div>
+            <div class="breakdown-item">
+              <div class="breakdown-label">Study Years</div>
+              <div class="breakdown-val">10–14 yrs</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-content" id="mbbs-road">
+        <div class="roadmap">
+          <div class="roadmap-step"><div class="step-left"><div class="step-dot">1</div><div class="step-line"></div></div><div class="step-content"><div class="step-title">NEET UG (Class 12)</div><div class="step-desc">Crack NEET with 600+ score. Brutal competition, 20L+ aspirants.</div></div></div>
+          <div class="roadmap-step"><div class="step-left"><div class="step-dot">2</div><div class="step-line"></div></div><div class="step-content"><div class="step-title">MBBS — 5.5 Years</div><div class="step-desc">4.5 years + 1 year internship. No holidays, heavy syllabus.</div></div></div>
+          <div class="roadmap-step"><div class="step-left"><div class="step-dot">3</div><div class="step-line"></div></div><div class="step-content"><div class="step-title">MD/MS (optional) — 3 more years</div><div class="step-desc">Specialize if you want real money. Crack NEET PG for it.</div></div></div>
+          <div class="roadmap-step"><div class="step-left"><div class="step-dot">4</div><div class="step-line"></div></div><div class="step-content"><div class="step-title">Practice / Hospital Job</div><div class="step-desc">Finally earning around age 27–30. Worth it only if you LOVE it.</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BAMS/AYURVEDA -->
+    <div class="job-card tier-least" id="card-bams">
+      <div class="card-top">
+        <span class="card-emoji">🌿</span>
+        <div class="card-title">BAMS — Ayurveda</div>
+        <div class="card-subtitle">Ayurvedic Physician</div>
+        <div class="salary-pill">₹30k–2L/mo</div>
+      </div>
+      <div class="card-tabs">
+        <button class="tab-btn active" onclick="switchTab('bams','do',this)">What they do</button>
+        <button class="tab-btn" onclick="switchTab('bams','salary',this)">Salary</button>
+        <button class="tab-btn" onclick="switchTab('bams','road',this)">Roadmap</button>
+      </div>
+      <div class="tab-content active" id="bams-do">
+        <p class="do-text">Treat patients using Ayurvedic medicine — herbs, Panchakarma therapies, lifestyle counseling. Work in clinics, wellness resorts, or hospitals. The market is growing but government jobs are few and salaries are generally low unless you go private/luxury wellness.</p>
+      </div>
+      <div class="tab-content" id="bams-salary">
+        <div class="salary-section">
+          <div class="salary-range">
+            <div class="salary-label">Average Monthly</div>
+            <div class="salary-big">₹30k – 2L</div>
+            <div class="salary-note">Govt jobs around ₹35–60k. Private wellness/luxury can reach 1–2L+</div>
+          </div>
+          <div class="salary-breakdown">
+            <div class="breakdown-item">
+              <div class="breakdown-label">Start Earning</div>
+              <div class="breakdown-val">Age 23–24</div>
+            </div>
+            <div class="breakdown-item">
+              <div class="breakdown-label">Study Years</div>
+              <div class="breakdown-val">5.5 yrs</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-content" id="bams-road">
+        <div class="roadmap">
+          <div class="roadmap-step"><div class="step-left"><div class="step-dot">1</div><div class="step-line"></div></div><div class="step-content"><div class="step-title">NEET UG</div><div class="step-desc">Requires NEET score, easier cutoff than MBBS.</div></div></div>
+          <div class="roadmap-step"><div class="step-left"><div class="step-dot">2</div><div class="step-line"></div></div><div class="step-content"><div class="step-title">BAMS — 5.5 Years</div><div class="step-desc">Includes 1 year internship. Heavy memorization of classical texts.</div></div></div>
+          <div class="roadmap-step"><div class="step-left"><div class="step-dot">3</div><div class="step-line"></div></div><div class="step-content"><div class="step-title">MD Ayurveda (optional)</div><div class="step-desc">2–3 more years to specialize. Opens hospital/research roles.</div></div></div>
+          <div class="roadmap-step"><div class="step-left"><div class="step-dot">4</div><div class="step-line"></div></div><div class="step-content"><div class="step-title">Clinic / Wellness Resort</div><div class="step-desc">Best money in luxury wellness brands like Kairali, Ananda etc.</div></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /cards-wrapper -->
+</section>
+
+<div class="section-spacer"></div>
+
+<!-- ═══════════════ TIER 2 — MID SUITABLE ═══════════════ -->
+<section class="tier-mid">
+  <div class="tier-header tier-mid">
+    <div class="tier-number" style="color:var(--green-dark)">02</div>
+    <div class="tier-meta">
+      <p class="tier-label" style="color:var(--green-mid);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;font-weight:500;margin-bottom:4px;">Solid options, worth considering</p>
+      <h2 class="tier-title" style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--green-dark)">Mid Suitable<br>for You</h2>
+    </div>
+  </div>
+  <div style="height:3px;margin:0 28px 8px;border-radius:2px;background:linear-gradient(90deg,var(--green-mid),transparent);"></div>
+
+  <div class="cards-wrapper">
+
+    <!-- PHYSIOTHERAPY -->
+    <div class="job-card tier-mid" id="card-physio">
+      <div class="card-top">
+        <span class="card-emoji">💪</span>
+        <div class="card-title">Physiotherapy</div>
+        <div class="card-subtitle">BPT — Sports & Rehab Specialist</div>
+        <div class="salary-pill" style="background:var(--green-mid)">₹50k–2L/mo</div>
+      </div>
+      <div class="card-tabs">
+        <button class="tab-btn active" onclick="switchTab('physio','do',this)">What they do</button>
+        <button class="tab-btn" onclick="switchTab('physio','salary',this)">Salary</button>
+        <button class="tab-btn" onclick="switchTab('physio','road',this)">Roadmap</button>
+      </div>
+      <div class="tab-content active" id="physio-do">
+        <p class="do-text">Help patients recover from injuries, surgeries, and chronic pain using exercises, manual therapy, and machines. Work with sports teams, hospitals, or open your own clinic. IPL teams and sports franchises are now hiring physios regularly — it's a vibe.</p>
+      </div>
+      <div class="tab-content" id="physio-salary">
+        <div class="salary-section">
+          <div class="salary-range" style="background:linear-gradient(135deg,var(--green-dark),var(--green-mid))">
+            <div class="salary-label">Average Monthly</div>
+            <div class="salary-big">₹50k – 2L</div>
+            <div class="salary-note">Own clinic or sports team physio = 1.5–3L. Hospital jobs ₹40–80k.</div>
+          </div>
+          <div class="salary-breakdown">
+            <div class="breakdown-item">
+              <div class="breakdown-label">Start Earning</div>
+              <div class="breakdown-val">Age 22–23</div>
+            </div>
+            <div class="breakdown-item">
+              <div class="breakdown-label">Study Years</div>
+              <div class="breakdown-val">4.5 yrs</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-content" id="physio-road">
+        <div class="roadmap">
+          <div class="roadmap-step"><div class="step-left"><div class="step-dot" style="background:var(--green-mid)">1</div><div class="step-line"></div></div><div class="step-content"><div class="step-title" style="color:var(--green-dark)">BPT Entrance / Direct Admission</div><div class="step-desc">4.5-year course, no NEET required at many colleges.</div></div></div>
+          <div class="roadmap-step"><div class="step-left"><div class="step-dot" style="background:var(--green-mid)">2</div><div class="step-line"></div></div><div class="step-content"><div class="step-title" style="color:var(--green-dark)">Internship + MPT (optional)</div><div class="step-desc">2-year masters in Sports/Neuro/Ortho physio = more salary.</div></div></div>
+          <div class="roadmap-step"><div class="step-left"><div class="step-dot" style="background:var(--green-mid)">3</div><div class="step-line"></div></div><div class="step-content"><div class="step-title" style="color:var(--green-dark)">Hospital/Sports Team/Clinic</div><div class="step-desc">Join a sports club, hospital, or open private practice by 24.</div></div></div>
+          <div class="roadmap-step"><div class="step-left"><div class="step-dot" style="background:var(--green-mid)">4</div><div class="step-line"></div></div><div class="step-content"><div class="step-title" style="color:var(--green-dark)">Scale with Social Media</div><div class="step-desc">Build Instagram/YouTube → online consults = passive income.</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLINICAL RESEARCH -->
+    <div class="job-card tier-mid" id="card-cra">
+      <div class="card-top">
+        <span class="card-emoji">🔬</span>
+        <div class="card-title">Clinical Research</div>
+        <div class="card-subtitle">CRA / Regulatory Affairs</div>
+        <div class="salary-pill" style="background:var(--green-mid)">₹6–20 LPA</div>
+      </div>
+      <div class="card-tabs">
+        <button class="tab-btn active" onclick="switchTab('cra','do',this)">What they do</button>
+        <button class="tab-btn" onclick="switchTab('cra','salary',this)">Salary</button>
+        <button class="tab-btn" onclick="switchTab('cra','road',this)">Roadmap</button>
+      </div>
+      <div class="tab-content active" id="cra-do">
+        <p class="do-text">Monitor drug trials, manage patient data, ensure pharma companies follow protocols. Work at big companies like Sun Pharma, Cipla, Novartis, or CRO firms like IQVIA. Office job, travel occasionally, decent work-life balance. No hospital duties!</p>
+      </div>
+      <div class="tab-content" id="cra-salary">
+        <div class="salary-section">
+          <div class="salary-range" style="background:linear-gradient(135deg,var(--green-dark),var(--green-mid))">
+            <div class="salary-label">Annual Package</div>
+            <div class="salary-big">₹6 – 20 LPA</div>
+            <div class="salary-note">Entry ₹4–6L. With 3–5 yrs exp, easily ₹12–20 LPA.</div>
+          </div>
+          <div class="salary-breakdown">
+            <div class="breakdown-item">
+              <div class="breakdown-label">Start Earning</div>
+              <div class="breakdown-val">Age 22–23</div>
+            </div>
+            <div class="breakdown-item">
+              <div class="breakdown-label">Study Years</div>
+              <div class="breakdown-val">3–4 yrs</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-content" id="cra-road">
+        <div class="roadmap">
+          <div class="roadmap-step"><div class="step-left"><div class="step-dot" style="background:var(--green-mid)">1</div><div class="step-line"></div></div><div class="step-content"><div class="step-title" style="color:var(--green-dark)">BSc Life Sciences / Pharma</div><div class="step-desc">3-year BSc in Biotech, Microbio, or Pharma.</div></div></div>
+          <div class="roadmap-step"><div class="step-left"><div class="step-dot" style="background:var(--green-mid)">2</div><div class="step-line"></div></div><div class="step-content"><div class="step-title" style="color:var(--green-dark)">Short Certification in CRA</div><div class="step-desc">6-month cert from ACRP or SOCRA. Costs ~₹20–40k, totally worth it.</div></div></div>
+          <div class="roadmap-step"><div class="step-left"><div class="step-dot" style="background:var(--green-mid)">3</div><div class="step-line"></div></div><div class="step-content"><div class="step-title" style="color:var(--green-dark)">Entry Job at CRO/Pharma</div><div class="step-desc">IQVIA, Parexel, Sun Pharma, Cipla actively hire freshers.</div></div></div>
+          <div class="roadmap-step"><div class="step-left"><div class="step-dot" style="background:var(--green-mid)">4</div><div class="step-line"></div></div><div class="step-content"><div class="step-title" style="color:var(--green-dark)">Grow to Senior CRA / Manager</div><div class="step-desc">5 years in = ₹18–25 LPA with travel allowances.</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NUTRITIONIST -->
+    <div class="job-card tier-mid" id="card-nutri">
+      <div class="card-top">
+        <span class="card-emoji">🥗</span>
+        <div class="card-title">Nutritionist / Dietitian</div>
+        <div class="card-subtitle">Online Consulting + Brand Building</div>
+        <div class="salary-pill" style="background:var(--green-mid)">₹50k–3L/mo</div>
+      </div>
+      <div class="card-tabs">
+        <button class="tab-btn active" onclick="switchTab('nutri','do',this)">What they do</button>
+        <button class="tab-btn" onclick="switchTab('nutri','salary',this)">Salary</button>
+        <button class="tab-btn" onclick="switchTab('nutri','road',this)">Roadmap</button>
+      </div>
+      <div class="tab-content active" id="nutri-do">
+        <p class="do-text">Create personalized diet plans for weight loss, PCOS, athletes, and chronic conditions. The best part? Once you build a brand online, you consult via apps like Practo or your own Instagram — no fixed hours, no boss, work from anywhere.</p>
+      </div>
+      <div class="tab-content" id="nutri-salary">
+        <div class="salary-section">
+          <div class="salary-range" style="background:linear-gradient(135deg,var(--green-dark),var(--green-mid))">
+            <div class="salary-label">Monthly Potential</div>
+            <div class="salary-big">₹50k – 3L</div>
+            <div class="salary-note">Hospital dietitian ₹30–50k. Independent + online = sky's the limit.</div>
+          </div>
+          <div class="salary-breakdown">
+            <div class="breakdown-item">
+              <div class="breakdown-label">Start Earning</div>
+              <div class="breakdown-val">Age 21–22</div>
+            </div>
+            <div class="breakdown-item">
+              <div class="breakdown-label">Study Years</div>
+              <div class="breakdown-val">3 yrs</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-content" id="nutri-road">
+        <div class="roadmap">
+          <div class="roadmap-step"><div class="step-left"><div class="step-dot" style="background:var(--green-mid)">1</div><div class="step-line"></div></div><div class="step-content"><div class="step-title" style="color:var(--green-dark)">BSc Nutrition & Dietetics</div><div class="step-desc">3 years. Available at DU, Christ, Manipal etc. Easy admission.</div></div></div>
+          <div class="roadmap-step"><div class="step-left"><div class="step-dot" style="background:var(--green-mid)">2</div><div class="step-line"></div></div><div class="step-content"><div class="step-title" style="color:var(--green-dark)">MSc or PG Diploma (optional)</div><div class="step-desc">1–2 years to specialize in sports or clinical nutrition.</div></div></div>
+          <div class="roadmap-step"><div class="step-left"><div class="step-dot" style="background:var(--green-mid)">3</div><div class="step-line"></div></div><div class="step-content"><div class="step-title" style="color:var(--green-dark)">Build Social Media + Consult</div><div class="step-desc">Start Instagram/YouTube while studying. 10k followers = income.</div></div></div>
+          <div class="roadmap-step"><div class="step-left"><div class="step-dot" style="background:var(--green-mid)">4</div><div class="step-line"></div></div><div class="step-content"><div class="step-title" style="color:var(--green-dark)">Launch Consultation Business</div><div class="step-desc">Sell plans online, brand deals, corporate wellness = ₹1–3L/mo by 25.</div></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div style="height:20px;background:linear-gradient(to bottom,#F5F0E8,#F0EAD6);"></div>
+
+<!-- ═══════════════ TIER 3 — MOST SUITABLE ═══════════════ -->
+<section class="tier-best" style="background:linear-gradient(180deg,#F0EAD6 0%,#EBE3CC 100%)">
+  <div class="tier-header">
+    <div class="tier-number" style="color:var(--brown-dark)">03</div>
+    <div class="tier-meta">
+      <p class="tier-label" style="color:var(--gold);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;font-weight:500;margin-bottom:4px;">✦ Made for you, Vivitoli</p>
+      <h2 class="tier-title" style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--brown-dark)">Most Suitable<br>for You</h2>
+    </div>
+  </div>
+  <div style="height:3px;margin:0 28px 8px;border-radius:2px;background:linear-gradient(90deg,var(--gold),transparent);"></div>
+
+  <div class="cards-wrapper">
+
+    <!-- BDS DENTISTRY -->
+    <div class="job-card" style="background:#FDFAF3;border:1px solid rgba(201,168,76,0.2)" id="card-bds">
+      <div class="card-top">
+        <span class="card-emoji">🦷</span>
+        <div class="card-title" style="color:var(--brown-dark)">Dentistry (BDS)</div>
+        <div class="card-subtitle">Own Clinic Boss Energy</div>
+        <div class="salary-pill" style="background:linear-gradient(135deg,var(--brown-dark),var(--gold))">₹1–5L/mo</div>
+      </div>
+      <div class="card-tabs">
+        <button class="tab-btn active" onclick="switchTab('bds','do',this)">What they do</button>
+        <button class="tab-btn" onclick="switchTab('bds','salary',this)">Salary</button>
+        <button class="tab-btn" onclick="switchTab('bds','road',this)">Roadmap</button>
+      </div>
+      <div class="tab-content active" id="bds-do">
+        <p class="do-text">Fix teeth, do root canals, implants, veneers, braces. The real money is in cosmetic dentistry — whitening, smile makeovers. Open your clinic, set your own hours, charge what you want. No night duties. No hospital politics. Just you, your chair, and lakhs in the bank.</p>
+      </div>
+      <div class="tab-content" id="bds-salary">
+        <div class="salary-section">
+          <div class="salary-range" style="background:linear-gradient(135deg,var(--brown-dark),#8B6347)">
+            <div class="salary-label">Monthly Potential</div>
+            <div class="salary-big">₹1 – 5L</div>
+            <div class="salary-note">Own clinic by 26–27 = ₹2–5L/mo easily. Cosmetic dentist even more.</div>
+          </div>
+          <div class="salary-breakdown">
+            <div class="breakdown-item">
+              <div class="breakdown-label">Start Earning</div>
+              <div class="breakdown-val">Age 23–24</div>
+            </div>
+            <div class="breakdown-item">
+              <div class="breakdown-label">Study Years</div>
+              <div class="breakdown-val">5 yrs</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-content" id="bds-road">
+        <div class="roadmap">
+          <div class="roadmap-step"><div class="step-left"><div class="step-dot" style="background:var(--brown-mid)">1</div><div class="step-line" style="background:linear-gradient(to bottom,var(--brown-light),transparent)"></div></div><div class="step-content"><div class="step-title" style="color:var(--brown-dark)">NEET UG (easier cutoff)</div><div class="step-desc">Much lower score needed than MBBS. Totally doable with prep.</div></div></div>
+          <div class="roadmap-step"><div class="step-left"><div class="step-dot" style="background:var(--brown-mid)">2</div><div class="step-line" style="background:linear-gradient(to bottom,var(--brown-light),transparent)"></div></div><div class="step-content"><div class="step-title" style="color:var(--brown-dark)">BDS — 5 Years</div><div class="step-desc">Includes 1 yr internship. Hands-on, practical, not just books.</div></div></div>
+          <div class="roadmap-step"><div class="step-left"><div class="step-dot" style="background:var(--brown-mid)">3</div><div class="step-line" style="background:linear-gradient(to bottom,var(--brown-light),transparent)"></div></div><div class="step-content"><div class="step-title" style="color:var(--brown-dark)">MDS in Cosmetic (optional)</div><div class="step-desc">3 years specialization → luxury cosmetic dental = ₹3–8L/mo.</div></div></div>
+          <div class="roadmap-step"><div class="step-left"><div class="step-dot" style="background:var(--brown-mid)">4</div><div class="step-line" style="background:linear-gradient(to bottom,var(--brown-light),transparent)"></div></div><div class="step-content"><div class="step-title" style="color:var(--brown-dark)">Open Your Clinic</div><div class="step-desc">Small setup ₹5–15L investment. ROI in 1–2 years. Then it's all yours.</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HEALTHCARE MANAGEMENT -->
+    <div class="job-card" style="background:#FDFAF3;border:1px solid rgba(201,168,76,0.2)" id="card-hm">
+      <div class="card-top">
+        <span class="card-emoji">🏥</span>
+        <div class="card-title" style="color:var(--brown-dark)">Healthcare Management</div>
+        <div class="card-subtitle">BSc + MBA Hospital Admin / Health-tech</div>
+        <div class="salary-pill" style="background:linear-gradient(135deg,var(--brown-dark),var(--gold))">₹15–40 LPA</div>
+      </div>
+      <div class="card-tabs">
+        <button class="tab-btn active" onclick="switchTab('hm','do',this)">What they do</button>
+        <button class="tab-btn" onclick="switchTab('hm','salary',this)">Salary</button>
+        <button class="tab-btn" onclick="switchTab('hm','road',this)">Roadmap</button>
+      </div>
+      <div class="tab-content active" id="hm-do">
+        <p class="do-text">Run hospitals, manage operations, strategy, and staff. Or join a health-tech startup like Practo, PharmEasy, or 1MG in a business role. You use your biology background + business skills. This is corporate healthcare — AC offices, 9-to-5, and MBA salary. No patient duties ever.</p>
+      </div>
+      <div class="tab-content" id="hm-salary">
+        <div class="salary-section">
+          <div class="salary-range" style="background:linear-gradient(135deg,var(--brown-dark),#8B6347)">
+            <div class="salary-label">Annual Package</div>
+            <div class="salary-big">₹15 – 40 LPA</div>
+            <div class="salary-note">Post MBA from top B-school = ₹20–40 LPA. Health-tech startups even more.</div>
+          </div>
+          <div class="salary-breakdown">
+            <div class="breakdown-item">
+              <div class="breakdown-label">Start Earning</div>
+              <div class="breakdown-val">Age 24–25</div>
+            </div>
+            <div class="breakdown-item">
+              <div class="breakdown-label">Study Years</div>
+              <div class="breakdown-val">5–6 yrs</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-content" id="hm-road">
+        <div class="roadmap">
+          <div class="roadmap-step"><div class="step-left"><div class="step-dot" style="background:var(--brown-mid)">1</div><div class="step-line" style="background:linear-gradient(to bottom,var(--brown-light),transparent)"></div></div><div class="step-content"><div class="step-title" style="color:var(--brown-dark)">BSc (Any Life Science)</div><div class="step-desc">3-year BSc in Biotech, Microbio, or even Nursing. Easy admission.</div></div></div>
+          <div class="roadmap-step"><div class="step-left"><div class="step-dot" style="background:var(--brown-mid)">2</div><div class="step-line" style="background:linear-gradient(to bottom,var(--brown-light),transparent)"></div></div><div class="step-content"><div class="step-title" style="color:var(--brown-dark)">CAT / GMAT Prep + MBA</div><div class="step-desc">Target IIHMR, TISS, or top B-schools with healthcare focus. 2 years MBA.</div></div></div>
+          <div class="roadmap-step"><div class="step-left"><div class="step-dot" style="background:var(--brown-mid)">3</div><div class="step-line" style="background:linear-gradient(to bottom,var(--brown-light),transparent)"></div></div><div class="step-content"><div class="step-title" style="color:var(--brown-dark)">Placement at Hospital/Startup</div><div class="step-desc">Apollo, Fortis, Max, or health-tech firms hire MBA grads at ₹15–25 LPA.</div></div></div>
+          <div class="roadmap-step"><div class="step-left"><div class="step-dot" style="background:var(--brown-mid)">4</div><div class="step-line" style="background:linear-gradient(to bottom,var(--brown-light),transparent)"></div></div><div class="step-content"><div class="step-title" style="color:var(--brown-dark)">Director / C-Suite by 35</div><div class="step-desc">Hospital Director or VP at health startup = ₹40–80 LPA. Generational wealth.</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OPTOMETRY -->
+    <div class="job-card" style="background:#FDFAF3;border:1px solid rgba(201,168,76,0.2)" id="card-opto">
+      <div class="card-top">
+        <span class="card-emoji">👁️</span>
+        <div class="card-title" style="color:var(--brown-dark)">Optometry</div>
+        <div class="card-subtitle">Most Underrated PCB Career 🏆</div>
+        <div class="salary-pill" style="background:linear-gradient(135deg,var(--brown-dark),var(--gold))">₹80k–2.5L/mo</div>
+      </div>
+      <div class="card-tabs">
+        <button class="tab-btn active" onclick="switchTab('opto','do',this)">What they do</button>
+        <button class="tab-btn" onclick="switchTab('opto','salary',this)">Salary</button>
+        <button class="tab-btn" onclick="switchTab('opto','road',this)">Roadmap</button>
+      </div>
+      <div class="tab-content active" id="opto-do">
+        <p class="do-text">Test eyesight, prescribe glasses, manage eye health. Open a clinic AND an optical shop together — that combo is where the real money is. Screen time is ruining everyone's eyes, so this market is exploding. Less competition, less grind, and you can be your own boss by 24. Wildly underrated.</p>
+      </div>
+      <div class="tab-content" id="opto-salary">
+        <div class="salary-section">
+          <div class="salary-range" style="background:linear-gradient(135deg,var(--brown-dark),#8B6347)">
+            <div class="salary-label">Monthly Potential</div>
+            <div class="salary-big">₹80k – 2.5L</div>
+            <div class="salary-note">Clinic + optical shop combo = ₹1.5–3L/mo. Low investment, high returns.</div>
+          </div>
+          <div class="salary-breakdown">
+            <div class="breakdown-item">
+              <div class="breakdown-label">Start Earning</div>
+              <div class="breakdown-val">Age 22–23</div>
+            </div>
+            <div class="breakdown-item">
+              <div class="breakdown-label">Study Years</div>
+              <div class="breakdown-val">4 yrs</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-content" id="opto-road">
+        <div class="roadmap">
+          <div class="roadmap-step"><div class="step-left"><div class="step-dot" style="background:var(--brown-mid)">1</div><div class="step-line" style="background:linear-gradient(to bottom,var(--brown-light),transparent)"></div></div><div class="step-content"><div class="step-title" style="color:var(--brown-dark)">B.Optom (4 years)</div><div class="step-desc">Available at AIIMS, LV Prasad, Manipal. No NEET required at most.</div></div></div>
+          <div class="roadmap-step"><div class="step-left"><div class="step-dot" style="background:var(--brown-mid)">2</div><div class="step-line" style="background:linear-gradient(to bottom,var(--brown-light),transparent)"></div></div><div class="step-content"><div class="step-title" style="color:var(--brown-dark)">1-Year Internship</div><div class="step-desc">Hospital rotation, learning clinical and retail side both.</div></div></div>
+          <div class="roadmap-step"><div class="step-left"><div class="step-dot" style="background:var(--brown-mid)">3</div><div class="step-line" style="background:linear-gradient(to bottom,var(--brown-light),transparent)"></div></div><div class="step-content"><div class="step-title" style="color:var(--brown-dark)">Set Up Clinic + Optical Shop</div><div class="step-desc">₹3–8L setup. Premium frames, sunglasses = high margin business.</div></div></div>
+          <div class="roadmap-step"><div class="step-left"><div class="step-dot" style="background:var(--brown-mid)">4</div><div class="step-line" style="background:linear-gradient(to bottom,var(--brown-light),transparent)"></div></div><div class="step-content"><div class="step-title" style="color:var(--brown-dark)">Scale + Franchise</div><div class="step-desc">Multiple outlets or tie-up with Lenskart franchises = ₹3–5L/mo passive.</div></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <span class="footer-leaf">🌿</span>
+  <div class="footer-name">Vivitoli <span>Chishi</span></div>
+  <p class="footer-msg">Your future doesn't have to cost you your life. Pick smart, work intentional, earn well. You've got this. 🌱</p>
+</footer>
+
+<script>
+  function switchTab(cardId, tab, btn) {
+    // hide all tabs in this card
+    const card = document.getElementById('card-' + cardId);
+    card.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    card.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    // show selected
+    document.getElementById(cardId + '-' + tab).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  // Stagger card animations
+  document.querySelectorAll('.job-card').forEach((card, i) => {
+    card.style.animationDelay = (i * 0.1) + 's';
+  });
+</script>
+</body>
+</html>
